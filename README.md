@@ -61,7 +61,7 @@ gmm = fdata_gmm(3, 'full')
 gmms = gmm.fit(X)
 gmm.membership_matrix()
 gmm.binary_membership_matrix()
-gmm,calculate_weights()
+gmm.calculate_weights()
 ```
 
 - projection_coefficients (ndarray): The input data in the form of projection coefficients.
