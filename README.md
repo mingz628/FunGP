@@ -81,11 +81,11 @@ The complete process of using this library is as follows：
 ```python
 from Class_smoother import smoother
 Smoother = smoother(smoother = 'bspline', smoother_args = {'degree': 3, 'n_basis': 10})
-fdate_smooth = Smoother.fit(Y)
+fdata_smooth = Smoother.fit(Y)
 
 from Class_projector import projector
 Projector = projector(projection_method = 'fpca', basis = 'bspline', basis_args = {'degree': 3, 'n_basis': 5, 'n_components': 4})
-coefficients = Projector.fit_transform(fdate_smooth)
+coefficients = Projector.fit_transform(fdata_smooth)
 
 from Class_gmm import fdata_gmm
 gmm = fdata_gmm(n_components = 4)
