@@ -144,3 +144,99 @@ class smoother:
         
         # Return the transformed functional data
         return fd_smooth
+
+
+# In[3]:
+
+
+dataset = skfda.datasets.fetch_growth()
+fd = dataset['data']
+y = dataset['target']
+
+
+# In[4]:
+
+
+X = fd.data_matrix.reshape(fd.n_samples, -1)
+
+
+# In[5]:
+
+
+tem = smoother(smoother = 'bspline', smoother_args = {'degree': 3, 'n_basis': 31})
+fdate_smooth = tem.fit(X)
+fdate_smooth
+
+
+# In[6]:
+
+
+tem = smoother(smoother = 'fourier', smoother_args = {'n_basis': 10, 'period': 1})
+fdate_smooth = tem.fit(X)
+fdate_smooth
+
+
+# In[7]:
+
+
+tem = smoother(smoother = 'kernel', smoother_args = {'bandwidth': 0.1})
+fdate_smooth = tem.fit(X)
+fdate_smooth
+
+
+# In[8]:
+
+
+tem = smoother(smoother = 'wavelet', smoother_args = {'wavelet': 'db4'})
+fdate_smooth = tem.fit(X)
+fdate_smooth
+
+
+# In[9]:
+
+
+data_matrix = [[[1, 0.3], [2, 0.4]], [[2, 0.5], [3, 0.6]]]
+grid_points = [[2, 4], [3,6]]
+fd = FDataGrid(data_matrix)
+
+
+# In[10]:
+
+
+data = np.array([
+    [1, 2, 3],
+    [4, 5, 6],
+    [7, 8, 9]
+])
+
+# Set the wavelet type and decomposition level
+wavelet_type = 'db2'
+level = 1
+
+# Perform the wavelet decomposition
+coeffs = pywt.wavedec2(data, wavelet_type, level=level)
+
+# Define a thresholding function
+def threshold_coeffs(coeffs, threshold):
+    thresholded_coeffs = []
+    for i, coeff in enumerate(coeffs):
+        if i == 0:
+            thresholded_coeffs.append(coeff)
+        else:
+            thresholded_coeffs.append(tuple(pywt.threshold(c, threshold, mode='soft') for c in coeff))
+    return thresholded_coeffs
+
+# Set the threshold value and apply the thresholding function
+threshold_value = 1
+thresholded_coeffs = threshold_coeffs(coeffs, threshold_value)
+
+# Reconstruct the smoothed data
+smoothed_data = pywt.waverec2(thresholded_coeffs, wavelet_type)
+
+
+
+# In[ ]:
+
+
+
+

@@ -328,3 +328,43 @@ class projector:
         
         # Return the projection coefficients, mean, and basis functions
         return projection_coefficients
+
+
+# In[7]:
+
+
+dataset = skfda.datasets.fetch_growth()
+fd = dataset['data']
+y = dataset['target']
+# fd.plot()
+
+
+# In[8]:
+
+
+tem = projector(projection_method = 'expansion', basis = 'bspline', basis_args = {'degree': 3, 'n_basis': 31})
+coefficients = tem.fit_transform(fd)
+coefficients
+
+
+# In[9]:
+
+
+tem = projector(projection_method = 'expansion', basis = 'fourier', basis_args = {'n_basis': 31})
+coefficients = tem.fit_transform(fd)
+coefficients
+
+
+# In[10]:
+
+
+tem = projector(projection_method = 'expansion', basis = 'wavelet', basis_args = {'wavelet': 'db4', 'n_basis': 20})
+coefficients = tem.fit_transform(fd)
+coefficients
+
+
+# In[ ]:
+
+
+
+
