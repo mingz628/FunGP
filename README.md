@@ -72,3 +72,40 @@ Then the next attributes returned are the results obtained through GMM.
 - membership_indicator_matrix (ndarray): A binary membership indicator matrix that indicates the cluster membership of each data point.
 - cluster_membership (ndarray): An array of cluster membership values that indicates the cluster membership of each data point.
 - calculate_weights (ndarray): An array of final weights that can be used directly through the clustering method.
+
+---
+### Usage
+
+The complete process of using this library is as follows：
+
+```python
+from Class_smoother import smoother
+Smoother = smoother(smoother = 'bspline', smoother_args = {'degree': 3, 'n_basis': 10})
+fdate_smooth = Smoother.fit(Y)
+
+from Class_projector import projector
+Projector = projector(projection_method = 'fpca', basis = 'bspline', basis_args = {'degree': 3, 'n_basis': 5, 'n_components': 4})
+coefficients = Projector.fit_transform(fdate_smooth)
+
+from Class_gmm import fdata_gmm
+gmm = fdata_gmm(n_components = 4)
+gmms = gmm.fit(coefficients)
+membership_matrix = gmm.membership_matrix()
+affinity_matrix = gmm.affinity_matrix()
+weights = gmm.calculate_weights()
+
+from sklearn.cluster import SpectralClustering
+sc = SpectralClustering(n_clusters=4, affinity='precomputed', assign_labels='discretize')
+sc.fit(weights)
+clustering_label = sc.labels_
+
+# Get the AMI score
+from sklearn.metrics.cluster import adjusted_mutual_info_score
+print("AMI score:")
+print(adjusted_mutual_info_score(label, clustering_label))
+
+# Get the ARM score
+from sklearn.metrics.cluster import adjusted_rand_score
+print("ARM score:")
+print(adjusted_rand_score(label, clustering_label))
+```
