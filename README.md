@@ -2,7 +2,7 @@
 ---
 ### Introduction
 
-GPmixture is a Python package for model-based on Gaussian mixture models.
+GPmixture is a Python package for model-based clustering on Gaussian mixture models.
 
 ---
 ### Initialisation
@@ -32,7 +32,7 @@ tem = smoother(smoother = 'bspline', smoother_args = {'degree': 3, 'n_basis': 31
 fdate_smooth = tem.fit(X)
 ```
 
-- smoother (str): The smoother to use (e.g., 'bspline', 'fourier', 'kernel').
+- smoother (str): The smoother to use (e.g., 'bspline', 'fourier', 'kernel', 'wavelet').
 - smoother_args (dict): Additional arguments for the smoother (e.g., {'bandwidth': 0.1} for a kernel smoother).
 - domain_range (tuple): The domain range of the functional data.
 - X (ndarray): The input data to transform.
@@ -47,8 +47,8 @@ tem = projector(projection_method = 'expansion', basis = 'bspline', basis_args =
 coefficients = tem.fit_transform(fd)
 ```
 
-- projection_method (str): The projection method to use (e.g., 'fpca', 'pca', 'kpca', etc.).
-- basis (str): The basis function to use for the projection (e.g., 'bspline', 'wavelet', 'kernel', etc.).
+- projection_method (str): The projection method to use (e.g., 'fpca', 'pca', 'kpca', 'expansion'.).
+- basis (str): The basis function to use for the projection (e.g., 'bspline', 'wavelet', 'kernel', 'fourier'.).
 - basis_args: Additional arguments for the projection method.
 
 ---
@@ -67,9 +67,8 @@ gmm,calculate_weights()
 - projection_coefficients (ndarray): The input data in the form of projection coefficients.
 - n_components (int): The number of mixture components to use in the GMM.
 - covariance_type (str): The type of covariance matrix to use in the GMM (e.g., 'full', 'tied', 'diag', 'spherical').
-- clustering_method (str): The clustering method to apply after fitting the GMM (e.g., 'kmeans').
 
 Then the next attributes returned are the results obtained through GMM.
 - membership_indicator_matrix (ndarray): A binary membership indicator matrix that indicates the cluster membership of each data point.
 - cluster_membership (ndarray): An array of cluster membership values that indicates the cluster membership of each data point.
-- calculate_weights (ndarray): An array of final weight that can be used directly through clustering method.
+- calculate_weights (ndarray): An array of final weights that can be used directly through the clustering method.
