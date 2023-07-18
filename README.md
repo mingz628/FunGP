@@ -29,7 +29,7 @@ In order to use Smoother, that is, the data is smoothed by conversion and conver
 
 ```python
 tem = smoother(smoother = 'bspline', smoother_args = {'degree': 3, 'n_basis': 31}, domain_range = (10))
-fdate_smooth = tem.fit(X)
+fdata_smooth = tem.fit(X)
 ```
 
 - smoother (str): The smoother to use (e.g., 'bspline', 'fourier', 'kernel', 'wavelet').
