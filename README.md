@@ -2,7 +2,7 @@
 ---
 ### Introduction
 
-GPmixture is an ensemble clustering framework that can efficiently identify the latent cluster labels of functional data from a Gaussian process mixture.
+GPmixture is an ensemble clustering framework that can efficiently identify the latent cluster labels of functional data from a Gaussian process mixture. Our approach exploits the independence and Gaussianity of the coefficients in the Karhunen-Loeve expansion of a Gaussian random function. 
 
 ---
 ### Initialisation
@@ -23,7 +23,7 @@ from unigmm.gpmix_gmm import unigmm
 ---
 ### Smoother
 
-The smoother class is used to smooth raw data, which is the first step in this package. The data is smoothed and converted into a more suitable data type called FDataGrid. FDataGrid is a data type from the skfda library, which is more convenient for subsequent operations.
+The smoother class is used to smooth raw data, which is the first step in this package. The data is smoothed and converted into a more suitable data type called FDataGrid. FDataGrid is a data type from the skfda library, which is more convenient for subsequent operations. Users can choose among four methods of bspline, fourier, kernel and wavelet and adjust the parameters for smooth.
 
 To use the smoother class, follow these steps:
 
@@ -40,7 +40,7 @@ fdata_smoothed = gpmix_smoother.fit(X)
 ---
 ### Projector
 
-The projector class performs the projection of an FDataGrid object using a specified projection method and basis. It is the second step in this package.
+The projector class performs the projection of an FDataGrid object using a specified projection method and basis. It is the second step in this package.This step is based on Karhunen-Loeve expansion, users can choose the desired projection method among fpca, pca, kpca and orthogonal expansion.
 
 Here's an example of using the projector class:
 
@@ -55,7 +55,7 @@ projection_coefficients = gpmix_projector.fit(fdata_smoothed)
 ---
 ### Unigmm
 
-The unigmm class performs clustering on projection coefficients using Gaussian Mixture Models (GMMs). It is the third step in this package.
+The unigmm class performs clustering on projection coefficients using Gaussian Mixture Models (GMMs). The user needs to provide the number of components for clustering, as well as some optional parameters. 
 
 ```python
 gpmix_unigmm = unigmm(3, 'full')
