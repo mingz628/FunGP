@@ -49,7 +49,7 @@ gpmix_projector = projector(projection_method = 'expansion', projection_args = {
 projection_coefficients = gpmix_projector.fit(fdata_smoothed)
 ```
 
-- projection_method (str): The projection method to use (e.g., 'fpca', 'pca', 'kpca', 'expansion'.).(.
+- projection_method (str): The projection method to use (e.g., 'fpca', 'pca', 'kpca', 'expansion'.).
 - projection_args: Additional arguments for the projection methode(e.g., 'basis': 'bspline', 'wavelet', 'kernel', 'fourier' and arguments).
 
 ---
