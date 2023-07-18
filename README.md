@@ -2,12 +2,12 @@
 ---
 ### Introduction
 
-GPmixture is a Python package for model-based clustering on Gaussian mixture models.
+GPmixture is an ensemble clustering framework that can efficiently identify the latent cluster labels of functional data from a Gaussian process mixture.
 
 ---
 ### Initialisation
 
-First, you need to load some dependent libraries.
+To get started with GPmixture, make sure to import the necessary libraries:
 
 ```python
 import numpy as np
@@ -15,21 +15,21 @@ import skfda
 import pywt
 import scipy
 import sklearn
-from Class_smoother import smoother
-from Class_projector import projector
-from Class_gmm import fdata_gmm
+from smoother.gpmix_smoother import smoother
+from projector.gpmix_projector import projector
+from unigmm.gpmix_gmm import unigmm
 ```
 
 ---
 ### Smoother
 
-Smoother is a class that can smooth raw data. It's a first step in this package.
+The smoother class is used to smooth raw data, which is the first step in this package. The data is smoothed and converted into a more suitable data type called FDataGrid. FDataGrid is a data type from the skfda library, which is more convenient for subsequent operations.
 
-In order to use Smoother, that is, the data is smoothed by conversion and converted into a more suitable data type FDataGrid. FdataGrid is a data type from the skfda library, which is more convenient for the following operations.
+To use the smoother class, follow these steps:
 
 ```python
-tem = smoother(smoother = 'bspline', smoother_args = {'degree': 3, 'n_basis': 31}, domain_range = (10))
-fdata_smooth = tem.fit(X)
+gpmix_smoother = smoother(smoother = 'bspline', smoother_args = {'degree': 3, 'n_basis': 31}, domain_range = (10))
+fdata_smoothed = gpmix_smoother.fit(X)
 ```
 
 - smoother (str): The smoother to use (e.g., 'bspline', 'fourier', 'kernel', 'wavelet').
@@ -40,11 +40,13 @@ fdata_smooth = tem.fit(X)
 ---
 ### Projector
 
-Projecter is a class that performs the projection of an FDataGrid object using a specified projection method and basis. It's the second step in this package.
+The projector class performs the projection of an FDataGrid object using a specified projection method and basis. It is the second step in this package.
+
+Here's an example of using the projector class:
 
 ```python
-tem = projector(projection_method = 'expansion', basis = 'bspline', basis_args = {'degree': 3, 'n_basis': 31})
-coefficients = tem.fit_transform(fd)
+gpmix_projector = projector(projection_method = 'expansion', projection_args = {'basis': 'bspline', 'degree': 3, 'n_basis': 31})
+projection_coefficients = gpmix_projector.fit(fdata_smoothed)
 ```
 
 - projection_method (str): The projection method to use (e.g., 'fpca', 'pca', 'kpca', 'expansion'.).
@@ -52,16 +54,16 @@ coefficients = tem.fit_transform(fd)
 - basis_args: Additional arguments for the projection method.
 
 ---
-### GMM
+### Unigmm
 
-GMM is a class that performs clustering on projection coefficients using Gaussian Mixture Models (GMMs). It's the third step in this package.
+The unigmm class performs clustering on projection coefficients using Gaussian Mixture Models (GMMs). It is the third step in this package.
 
 ```python
-gmm = fdata_gmm(3, 'full')
-gmms = gmm.fit(X)
-gmm.membership_matrix()
-gmm.binary_membership_matrix()
-gmm.calculate_weights()
+gpmix_unigmm = unigmm(3, 'full')
+gpmix_unigmm.fit(projection_coefficients)
+gpmix_unigmm.membership_matrix()
+gpmix_unigmm.binary_membership_matrix()
+gpmix_unigmm.calculate_weights()
 ```
 
 - projection_coefficients (ndarray): The input data in the form of projection coefficients.
@@ -76,23 +78,23 @@ Then the next attributes returned are the results obtained through GMM.
 ---
 ### Usage
 
-The complete process of using this library is as follows：
+To use the GPmixture library, follow the complete process outlined below:
 
 ```python
-from Class_smoother import smoother
-Smoother = smoother(smoother = 'bspline', smoother_args = {'degree': 3, 'n_basis': 10})
-fdata_smooth = Smoother.fit(Y)
+from smoother.gpmix_smoother import smoother
+gpmix_smoother = smoother(smoother = 'bspline', smoother_args = {'degree': 3, 'n_basis': 10})
+fdata_smoothed = gpmix_smoother.fit(Y)
 
-from Class_projector import projector
-Projector = projector(projection_method = 'fpca', basis = 'bspline', basis_args = {'degree': 3, 'n_basis': 5, 'n_components': 4})
-coefficients = Projector.fit_transform(fdata_smooth)
+from projector.gpmix_projector import projector
+gpmix_projector = projector(projection_method = 'expansion', projection_args = {'basis': 'bspline', 'degree': 3, 'n_basis': 31})
+coefficients = Projector.fit(fdata_smoothed)
 
-from Class_gmm import fdata_gmm
-gmm = fdata_gmm(n_components = 4)
-gmms = gmm.fit(coefficients)
-membership_matrix = gmm.membership_matrix()
-affinity_matrix = gmm.affinity_matrix()
-weights = gmm.calculate_weights()
+from unigmm.gpmix_unigmm import unigmm
+gpmix_unigmm = unigmm(n_components = 4)
+gpmix_unigmm.fit(coefficients)
+membership_matrix = gpmix_unigmm.membership_matrix()
+affinity_matrix = gpmix_unigmm.affinity_matrix()
+weights = gpmix_unigmm.calculate_weights()
 
 from sklearn.cluster import SpectralClustering
 sc = SpectralClustering(n_clusters=4, affinity='precomputed', assign_labels='discretize')
