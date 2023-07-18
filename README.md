@@ -7,7 +7,7 @@ GPmixture is an ensemble clustering framework that can efficiently identify the 
 ---
 ### Initialisation
 
-To get started with GPmixture, make sure to import the necessary libraries:
+To get started with GPmixture, make sure to import and install the necessary libraries:
 
 ```python
 import numpy as np
