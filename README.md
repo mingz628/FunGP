@@ -23,7 +23,7 @@ from unigmm.gpmix_gmm import unigmm
 ---
 ### Smoother
 
-The smoother class is used to smooth raw data, which is the first step in this package. The data is smoothed and converted into a more suitable data type called FDataGrid. FDataGrid is a data type from the skfda library, which is more convenient for subsequent operations. Users can choose among four methods of bspline, fourier, kernel and wavelet and adjust the parameters for smooth.
+The smoother class is used to smooth raw data, which is the first step in this package. The data is smoothed and converted into a more suitable data type called FDataGrid. FDataGrid is a data type from the skfda library, which is more convenient for subsequent operations. Users can choose among four methods of bspline, fourier, kernel and wavelet and adjust the parameters for smoothness.
 
 To use the smoother class, follow these steps:
 
