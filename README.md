@@ -102,7 +102,7 @@ Then the next attributes returned are the results obtained through GMM.
 ---
 ### Usage
 
-To use the GPmixture library, follow the complete process outlined below:
+To use the GPmixture library, follow the complete example process outlined below:
 
 ```python
 from smoother.gpmix_smoother import smoother
