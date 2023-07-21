@@ -37,6 +37,13 @@ fdata_smoothed = gpmix_smoother.fit(X)
 - domain_range (tuple): The domain range of the functional data.
 - X (ndarray): The input data to transform.
 
+```
+Example:
+  B-spline basis: smoother(smoother = 'bspline', smoother_args = {'degree': 3, 'n_basis': 20})
+  Wavelet basis: smoother(smoother = 'wavelet', smoother_args = {'wavelet': 'db4', 'n_basis': 20})
+  Kernel basis: smoother(smoother = 'kernel', smoother_args = {'bandwidth': 1.0})
+  Fourier basis: smoother(smoother = 'fourier', smoother_args ={'n_basis': 20, 'period': 1})
+```
 ---
 ### Projector
 
@@ -49,8 +56,25 @@ gpmix_projector = projector(projection_method = 'expansion', projection_args = {
 projection_coefficients = gpmix_projector.fit(fdata_smoothed)
 ```
 
-- projection_method (str): The projection method to use (e.g., 'fpca', 'pca', 'kpca', 'expansion'.).
+- projection_method (str): The projection method to use (e.g., 'fpca', 'pca', 'kpca', 'expansion').
 - projection_args: Additional arguments for the projection methode(e.g., 'basis': 'bspline', 'wavelet', 'kernel', 'fourier' and arguments).
+
+```
+Example:
+  Expansion:
+    B-spline basis: projector(projection_method = 'expansion', projection_args = {'n_components': 10, 'basis': 'bspline', 'degree': 3, 'n_basis': 20})
+    Wavelet basis: projector(projection_method = 'expansion', projection_args = {'n_components': 10, 'basis': 'wavelet', 'wavelet': 'db4', 'n_basis': 20})
+    Fourier basis: projector(projection_method = 'expansion', projection_args ={'n_components': 10, 'basis': 'fourier', 'n_basis': 20, 'period': 1})
+    Random basis: projector(projection_method = 'expansion', projection_args ={'n_components': 10, 'basis': 'random'})
+  Functional Principal Component Analysis:
+    FPCA: projector(projection_method = 'fpca', projection_args = {'n_components': 10})
+    B-spline basis: projector(projection_method = 'fpca', projection_args = {'n_components': 10, 'basis': 'bspline', 'degree': 3, 'n_basis': 20})
+    Fourier basis: projector(projection_method = 'fpca', projection_args ={'n_components': 10, 'basis': 'fourier', 'n_basis': 20, 'period': 1})
+  Principal Component Analysis:
+    PCA: projector(projection_method = 'pca', projection_args = {'n_components': 10})
+  Kernel Principal Component Analysis:
+    KPCA: projector(projection_method = 'kpca', projection_args = {'n_components': 10})
+```
 
 ---
 ### Unigmm
