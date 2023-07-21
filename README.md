@@ -68,6 +68,7 @@ Example:
     Random basis: projector(projection_method = 'expansion', projection_args ={'n_components': 10, 'basis': 'random'})
   Functional Principal Component Analysis:
     FPCA: projector(projection_method = 'fpca', projection_args = {'n_components': 10})
+    Monomial basis: projector(projection_method = 'fpca', projection_args = {'n_components': 10, 'basis': 'monomial', 'domain_range': (0,1), 'n_basis': 20})
     B-spline basis: projector(projection_method = 'fpca', projection_args = {'n_components': 10, 'basis': 'bspline', 'degree': 3, 'n_basis': 20})
     Fourier basis: projector(projection_method = 'fpca', projection_args ={'n_components': 10, 'basis': 'fourier', 'n_basis': 20, 'period': 1})
   Principal Component Analysis:
