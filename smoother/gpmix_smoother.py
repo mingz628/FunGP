@@ -15,8 +15,6 @@ from scipy.spatial.distance import cdist
 from sklearn.preprocessing import StandardScaler
 
 
-# In[2]:
-
 
 class smoother:
     """
@@ -73,6 +71,7 @@ class smoother:
             
         
         fd = skfda.FDataGrid(data_matrix=X, grid_points=domain_range)
+        self.data = fd
         
         # Smooth the input data if a smoother is specified
         if self.smoother is not None:
@@ -81,7 +80,7 @@ class smoother:
                 n_basis = self.smoother_args.get('n_basis', n_features)
                 
                 basis = skfda.representation.basis.BSplineBasis(n_basis=n_basis, order=degree)
-                smoother = skfda.preprocessing.smoothing.BasisSmoother(basis)
+                smoother = skfda.preprocessing.smoothing.BasisSmoother(basis)  
                 fd_smooth = smoother.fit_transform(fd)
             elif self.smoother == 'fourier':
                 n_basis = self.smoother_args.get('n_basis', n_features)
@@ -138,7 +137,8 @@ class smoother:
                 raise ValueError(f"Invalid smoother type: {self.smoother}")
                 
             self.fd_smooth = fd_smooth
-        
+            if smoother != 'wavelet':
+                self.fda_smoother = smoother
 
             
         
@@ -147,3 +147,9 @@ class smoother:
     
     def plot(self):
         self.fd_smooth.plot()
+        
+    def get_score(self, X, y):
+        return self.fda_smoother.score(X = X, y = y)
+    
+    def score(self):
+        return self.fda_smoother.score(self.data, self.data)
