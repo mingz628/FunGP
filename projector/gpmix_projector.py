@@ -267,8 +267,8 @@ class projector:
         if self.basis == None:
         
             n_components = self.projection_args.get('n_components', 3)
-            fpca = skfda.preprocessing.dim_reduction.FPCA(n_components = n_components, centering = True)
-            self.coefficients = fpca.fit_transform(fdata)
+            self.pca = skfda.preprocessing.dim_reduction.FPCA(n_components = n_components, centering = True)
+            self.coefficients = self.pca.fit_transform(fdata)
 #             self.coefficients = fpca.components_.data_matrix.squeeze()
 
             return self.coefficients.T
@@ -281,8 +281,8 @@ class projector:
                 domain_range=domain_range, n_basis=n_basis
             )
             basis_fd = fdata.to_basis(basis)
-            fpca_basis = FPCA(n_components)
-            self.coefficients = fpca_basis.fit_transform(basis_fd)
+            self.pca = FPCA(n_components)
+            self.coefficients = self.pca.fit_transform(basis_fd)
             return self.coefficients.T
         
         elif self.basis == 'fourier':
@@ -294,8 +294,8 @@ class projector:
                 domain_range=domain_range, n_basis=n_basis, period = period
             )
             basis_fd = fdata.to_basis(basis)
-            fpca_basis = FPCA(n_components)
-            self.coefficients = fpca_basis.fit_transform(basis_fd)
+            self.pca = FPCA(n_components)
+            self.coefficients = self.pca.fit_transform(basis_fd)
             return self.coefficients.T
         
         elif self.basis == 'bspline':
@@ -305,9 +305,9 @@ class projector:
             basis = skfda.representation.basis.BSplineBasis(
                 n_basis=n_basis, order = order
             )
-            basis_fd = fdata.to_basis(basis)
-            fpca_basis = FPCA(n_components)
-            self.coefficients = fpca_basis.fit_transform(basis_fd)
+            self.basis_fd = fdata.to_basis(basis)
+            self.pca = FPCA(n_components)
+            self.coefficients = self.pca.fit_transform(self.basis_fd)
             return self.coefficients.T
         
         
@@ -422,3 +422,15 @@ class projector:
         
 #         # Return the projection coefficients, mean, and basis functions
 #         return projection_coefficients
+
+    def plot_components(self):
+        self.pca.components_.plot()
+        
+    def plot(self):
+        FPCAPlot(
+            self.basis_fd.mean(),
+            self.pca.components_,
+            factor=30,
+            fig=plt.figure(figsize=(6, 2 * 4)),
+            n_rows=2,
+        ).plot()
