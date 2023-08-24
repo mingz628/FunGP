@@ -189,7 +189,7 @@ def _select_exemplars_from_thresholds(X, density, distance, density_threshold, d
     remainder_idx = np.where(~(density_inlier * distance_inlier))[0]
     means = X[means_idx, :]
     X_iter = X[remainder_idx, :]
-    print("%s modes selected." % means.shape[0])
+#     print("%s modes selected." % means.shape[0])
     return X_iter, means
 
 
@@ -199,7 +199,7 @@ def _select_exemplars_fromK(X, density, distance, max_components):
     remainder_idx = np.argsort(- density * distance)[range(max_components, n_samples)]
     means = X[means_idx, :]
     X_iter = X[remainder_idx, :]
-    print("%s modes selected." % means.shape[0])
+#     print("%s modes selected." % means.shape[0])
     return X_iter, means
 
 def _expand_covariance_matrix(covariances, covariance_type, n_features, n_components):
@@ -270,12 +270,14 @@ class overlap:
     def _get_omega_map(self, n_features, covariances_jitter):
         while True:
             n_components, _, _ = covariances_jitter.shape
-            omega_map = Overlap(n_features, n_components, self.weights_iter, self.means_iter, covariances_jitter,
+            omega_map = Overlap(n_features, n_components, self.weights_iter, self.means_iter, 
+                                covariances_jitter,
                                 np.array([1e-06, 1e-06]), 1e06).omega_map
             if np.max(omega_map.max(1)) > 0:
                 break
             else:
                 covariances_jitter *= 1.1
+        self.omega_map = omega_map
         return omega_map.max(1)
     
     
@@ -287,8 +289,8 @@ class overlap:
             if self._density_threshold is not None or self._distance_threshold is not None:
                 self._print_threshold_parameter_warning()
                 
-            print(self._distance)
-            print(self._max_components)
+#             print(self._distance)
+#             print(self._max_components)
             return _select_exemplars_fromK(self.data, self._density, self._distance, 
                                            self._max_components)
     
@@ -485,8 +487,9 @@ class unigmm:
             matrix_multiplication.append(np.matmul(membership_matrices[i], membership_matrices[i].T))
         self.affinity_matrix = sum(matrix_multiplication)
         return self.affinity_matrix
-        
-        
-
-
-
+    
+    def get_overlap(self):
+        tem = overlap(data = self.projection_coefficients, max_components = self.n_components)
+        self.overlap_max = tem.get_overlap()
+        self.omega_map = tem.omega_map
+        return self.omega_map
